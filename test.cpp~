@@ -1,0 +1,32 @@
+#include "record.h"
+#include <sstream>
+#include <string>
+#include <fstream>
+
+#include "record.h"
+#include "record.cpp"
+
+int main(){
+    Record record;
+    record.addTracksFromFile("songs.txt");
+    std::ifstream songFile("songs.txt");
+    std::vector<std::string> return_vector{};
+    std::string line;
+    while(std::getline(songFile, line)) {
+        return_vector.push_back(line);
+    }
+    string songFirstLine = return_vector[0];
+    std::cout << songFirstLine;
+
+
+    record.saveTracksToFile("test_output.txt");
+    std::ifstream infile("test_output.txt");
+    std::vector<std::string> re_vector{};
+    std::string lm;
+    while(std::getline(infile, lm)) {
+      return_vector.push_back(lm);
+    }
+    std::string testFirstLine = re_vector[0];
+    if(songFirstLine == testFirstLine)
+        cout << "true";
+}

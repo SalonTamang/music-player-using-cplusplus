@@ -1,0 +1,570 @@
+
+package task2;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class ApplicationRunner {
+
+    //class for golf club member
+    public class Member {
+    
+        private String name;
+        private int age;
+        private int memberId;
+        private boolean isJunior;
+        private int numGroupLessons;
+
+        private ArrayList<Booking> bookings;
+        
+        public Member(String name, int age, boolean isJunior, int memberId) {
+            this.name = name;
+            this.age = age;
+            this.isJunior = isJunior;
+            this.memberId = memberId;
+            this.numGroupLessons = 0;
+            this.bookings = new ArrayList<Booking>();
+        }
+        
+        public String getName() {
+            return this.name;
+        }
+        
+        public int getAge() {
+            return this.age;
+        }
+        
+        public boolean isJunior() {
+            return this.isJunior;
+        }
+
+        public int getMemberId(){
+            return this.memberId;
+        }
+
+        
+        public int getNumGroupLessons() {
+            return this.numGroupLessons;
+        }
+        
+        public ArrayList<Booking> getBookings() {
+            return this.bookings;
+        }
+        
+        public void incrementNumGroupLessons() {
+            this.numGroupLessons++;
+        }
+        
+        public void addBooking(Booking booking) {
+            this.bookings.add(booking);
+        }
+
+        public void setMemberId(int memberId) {
+            this.memberId = memberId;
+        }
+        
+        public void removeBooking(Booking booking) {
+            this.bookings.remove(booking);
+        }
+        
+    }
+
+    //class for instructor
+    public class Instructor {
+        private String name;
+        private int age;
+        private double hourlyRate;
+        private String certification;
+        
+        public Instructor(String name, int age, String certification) {
+           this.name = name;
+           this.age = age;
+           this.certification = certification;
+        }
+        
+        public String getName() {
+           return name;
+        }
+        
+        public int getAge() {
+           return age;
+        }
+        
+        public String getCertification() {
+           return certification;
+        }
+        
+        public void setName(String name) {
+           this.name = name;
+        }
+        
+        public void setAge(int age) {
+           this.age = age;
+        }
+
+        public double getHourlyRate(){
+            return hourlyRate;
+        }
+
+        public void setHourlyRate(double hourlyRate) {
+            this.hourlyRate = hourlyRate;
+        }
+        
+        public void setCertification(String certification) {
+           this.certification = certification;
+        }
+        
+        public String toString() {
+           return name + ", " + age + ", " + certification;
+        }
+     }
+     //class for booking
+     public class Booking {
+        private Member member;
+        private Instructor instructor;
+        private Lesson lesson;
+        private Date date;
+        private int durationMinutes;
+        private boolean isCancelled;
+     
+        public Booking(Member member, Instructor instructor, Lesson lesson, Date date, int durationMinutes) {
+           this.member = member;
+           this.instructor = instructor;
+           this.lesson = lesson;
+           this.date = date;
+           this.durationMinutes = durationMinutes;
+           this.isCancelled = false;
+        }
+     
+        // getters and setters for member, instructor, startTime, durationMinutes, and isCancelled
+        
+
+        public Member getMember() {
+            return member;
+        }
+
+        public Instructor getInstructor() {
+            return instructor;
+        }
+
+        public Lesson getLesson() {
+            return lesson;
+        } 
+
+        public Date getDate(){
+            return date;
+        }
+
+        public void cancelBooking() {
+           this.isCancelled = true;
+        }
+     
+        public boolean isCancelled() {
+           return isCancelled;
+        }
+     
+        public double getCost() {
+           return instructor.getHourlyRate() * (durationMinutes / 60.0);
+        }
+
+     }
+    
+
+     //class for lesson conducted by instructor either one-to-one or group
+     public class Lesson {
+        private Instructor instructor;
+        private List<Member> members;
+        private Date date;
+        private int durationMinutes;
+        private boolean isOneToOne;
+    
+        public Lesson(Instructor instructor, List<Member> members, Date date, int durationMinutes, boolean isOneToOne) {
+            this.instructor = instructor;
+            this.members = members;
+            this.date = date;
+            this.durationMinutes = durationMinutes;
+            this.isOneToOne = isOneToOne;
+        }
+    
+        // Getter and setter methods for all fields
+    
+        public Instructor getInstructor() {
+            return instructor;
+        }
+    
+        public void setInstructor(Instructor instructor) {
+            this.instructor = instructor;
+        }
+    
+        public List<Member> getMembers() {
+            return members;
+        }
+    
+        public void setMembers(List<Member> members) {
+            this.members = members;
+        }
+    
+        public Date getDate() {
+            return date;
+        }
+    
+        public void setDate(Date date) {
+            this.date = date;
+        }
+    
+        public int getDurationMinutes() {
+            return durationMinutes;
+        }
+    
+        public void setDurationMinutes(int durationMinutes) {
+            this.durationMinutes = durationMinutes;
+        }
+    
+        public boolean isOneToOne() {
+            return isOneToOne;
+        }
+    
+        public void setOneToOne(boolean isOneToOne) {
+            this.isOneToOne = isOneToOne;
+        }
+    }
+
+    //booking system
+    public class BookingSystem {
+        //using arraylist to store name of members, instructors, their lessons and booking information.
+        private ArrayList<Member> members;
+        private ArrayList<Instructor> instructors;
+        private ArrayList<Lesson> lessons;
+        private ArrayList<Booking> bookings;
+        
+        public BookingSystem() {
+            members = new ArrayList<Member>();
+            instructors = new ArrayList<Instructor>();
+            lessons = new ArrayList<Lesson>();
+            bookings = new ArrayList<Booking>();
+        }
+        
+        public void addMember(Member member) {
+            members.add(member);
+        }
+        
+        public void addInstructor(Instructor instructor) {
+            instructors.add(instructor);
+        }
+        
+        public void addLesson(Lesson lesson) {
+            lessons.add(lesson);
+        }
+        
+        public void addBooking(Booking booking) {
+            bookings.add(booking);
+        }
+        
+        public void removeMember(Member member) {
+            members.remove(member);
+        }
+        
+        public void removeInstructor(Instructor instructor) {
+            instructors.remove(instructor);
+        }
+        
+        public void removeLesson(Lesson lesson) {
+            lessons.remove(lesson);
+        }
+        
+        public void removeBooking(Booking booking) {
+            bookings.remove(booking);
+        }
+        
+        public ArrayList<Member> getMembers() {
+            return members;
+        }
+        
+        public ArrayList<Instructor> getInstructors() {
+            return instructors;
+        }
+        
+        public ArrayList<Lesson> getLessons() {
+            return lessons;
+        }
+        
+        public ArrayList<Booking> getBookings() {
+            return bookings;
+        } 
+        
+        
+        //sees if given member id is valid or not and then books for given member
+        public ArrayList<Booking> getBookingsForMember(Member member) {
+            ArrayList<Booking> memberBookings = new ArrayList<Booking>();
+            
+            for (Booking booking : bookings) {
+                if (booking.getMember() == member) {
+                    memberBookings.add(booking);
+                }
+            }
+            
+            return memberBookings;
+        }
+        
+        //sees if given instructor is valid or not and then books for given instructor
+        public ArrayList<Booking> getBookingsForInstructor(Instructor instructor) {
+            ArrayList<Booking> instructorBookings = new ArrayList<Booking>();
+            
+            for (Booking booking : bookings) {
+                if (booking.getInstructor() == instructor) {
+                    instructorBookings.add(booking);
+                }
+            }
+            
+            return instructorBookings;
+        }
+        
+        public ArrayList<Booking> getBookingsForLesson(Lesson lesson) {
+            ArrayList<Booking> lessonBookings = new ArrayList<Booking>();
+            
+            for (Booking booking : bookings) {
+                if (booking.getLesson() == lesson) {
+                    lessonBookings.add(booking);
+                }
+            }
+            
+            return lessonBookings;
+        }
+        
+        public ArrayList<Booking> getBookingsBetweenDates(Date startDate, Date endDate) {
+            ArrayList<Booking> bookingsBetweenDates = new ArrayList<Booking>();
+            
+            for (Booking booking : bookings) {
+                if (booking.getDate().after(startDate) && booking.getDate().before(endDate)) {
+                    bookingsBetweenDates.add(booking);
+                }
+            }
+            
+            return bookingsBetweenDates;
+        }
+        public void makeBooking(Member member, Instructor instructor, Lesson lesson, Date date, int duration) {
+            // Check if the requested booking slot is available
+            boolean isAvailable = true;
+            for (Booking booking : bookings) {
+                if (booking.getDate().equals(date) && booking.getLesson().equals(lesson) && booking.getInstructor().equals(instructor)) {
+                    isAvailable = false;
+                    break;
+                }
+            }
+        
+            // If the booking slot is available, create a new Booking object and add it to the list of bookings
+            if (isAvailable) {
+                Booking booking = new Booking(member, instructor, lesson, date, duration);
+                bookings.add(booking);
+                System.out.println("Booking successfully made for " + member.getName() + " on " + date.toString() + " with " + instructor.getName() + " for " + lesson.getDescription() + ".");
+            } else {
+                System.out.println("Sorry, the requested booking slot is not available.");
+            }
+        }
+        
+    }
+
+    public class OneToOneLesson extends Lesson {
+        private Instructor instructor;
+        private Member member;
+    
+        public OneToOneLesson(Instructor instructor, Member member, Date date, int durationMinutes) {
+            super(date);
+            this.instructor = instructor;
+            this.member = member;
+        }
+    
+        public Instructor getInstructor() {
+            return instructor;
+        }
+    
+        public Member getMember() {
+            return member;
+        }
+    
+        @Override
+        public double getCost() {
+            return instructor.getHourlyRate() * getDuration();
+        }
+    
+        @Override
+        public String toString() {
+            return "OneToOneLesson{" +
+                    "instructor=" + instructor +
+                    ", member=" + member +
+                    ", date=" + getDate() +
+                    ", startTime=" + getStartTime() +
+                    ", duration=" + getDuration() +
+                    ", cost=" + getCost() +
+                    '}';
+        }
+    }
+    
+
+    public class bookingDisplay {
+        private BookingSystem bookingSystem;
+        private Scanner scanner;
+
+        public bookingDisplay(BookingSystem bookingSystem) {
+            this.bookingSystem = bookingSystem;
+            this.scanner = new Scanner(System.in);
+        }
+
+        public void run() {
+            System.out.println("Welcome to the Golf Booking System!");
+
+            while (true) {
+                System.out.println("Please select an option:");
+                System.out.println("1. Make a booking");
+                System.out.println("2. View my bookings");
+                System.out.println("3. Exit");
+
+                int option = scanner.nextInt();
+
+                switch (option) {
+                    case 1:
+                        makeBooking();
+                        break;
+                    case 2:
+                        viewBookings();
+                        break;
+                    case 3:
+                        System.out.println("Goodbye!");
+                        return;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
+            }
+        }
+
+        private void makeBooking() {
+            // get member ID
+            System.out.print("Please enter your member ID: ");
+            int memberId = scanner.nextInt();
+
+            // get instructor ID
+            System.out.print("Please enter the instructor ID: ");
+            int instructor = scanner.nextInt();
+
+            // get lesson type
+            System.out.println("Please select a lesson type:");
+            System.out.println("1. One-to-one lesson");
+            System.out.println("2. Group lesson");
+            int lessonType = scanner.nextInt();
+
+            Lesson lesson;
+            if (lessonType == 1) {
+                lesson = new OneToOneLesson();
+            } else {
+                lesson = new GroupLesson();
+            }
+
+            // get booking date
+            System.out.print("Please enter the booking date (dd/mm/yyyy): ");
+            String bookingDate = scanner.next();
+
+            //get amount of minutes 
+            System.out.print("Please enter the amount of minutes you want to book for: ");
+            int time =  scanner.nextInt();
+
+            // make the booking
+            boolean success = bookingSystem.makeBooking(memberId, instructor, lesson, bookingDate, time);
+
+            if (success) {
+                System.out.println("Booking successful!");
+            } else {
+                System.out.println("Booking failed. Please try again.");
+            }
+        }
+
+        //one-to-one booking
+
+        
+
+        private void viewBookings() {
+            // get member ID
+            System.out.print("Please enter your member ID: ");
+            int memberId = scanner.nextInt();
+
+            // get bookings
+            Booking[] bookings = bookingSystem.getBookingsForMember(memberId);
+
+            if (bookings.length == 0) {
+                System.out.println("You have no bookings.");
+            } else {
+                System.out.println("Your bookings:");
+                for (Booking booking : bookings) {
+                    System.out.println("- " + booking);
+                }
+            }
+        }
+    }
+
+    public class GroupLesson extends Lesson {
+        private int maxCapacity;
+        private int currentCapacity;
+        private List<Member> members;
+    
+        public GroupLesson(String title, Instructor instructor, Date date, LocalTime startTime, LocalTime endTime, double hourlyRate, int maxCapacity) {
+            super(title, instructor, date, startTime, endTime, hourlyRate);
+            this.maxCapacity = maxCapacity;
+            this.currentCapacity = 0;
+            this.members = new ArrayList<>();
+        }
+    
+        public boolean addMember(Member member) {
+            if (currentCapacity >= maxCapacity) {
+                return false;
+            }
+            members.add(member);
+            currentCapacity++;
+            return true;
+        }
+    
+        public List<Member> getMembers() {
+            return members;
+        }
+    
+        public int getMaxCapacity() {
+            return maxCapacity;
+        }
+    
+        public int getCurrentCapacity() {
+            return currentCapacity;
+        }
+    }
+    
+
+
+     
+     
+    
+    public static void main(String[] args) {
+        // Create an instance of GolfBookingSystem
+        BookingSystem bookingSystem = new BookingSystem();
+
+        // Create some members
+        Member member1 = new Member("John Doe", 10);
+        Member member2 = new Member("Jane Doe", 30);
+
+        // Create some instructors
+        Instructor instructor1 = new Instructor("Jack Smith", 50.0);
+        Instructor instructor2 = new Instructor("Jill Johnson", 60.0);
+
+        // Create some lessons
+        Lesson oneToOneLesson1 = new OneToOneLesson(instructor1);
+        Lesson groupLesson1 = new GroupLesson(instructor1, 4);
+
+        // Make some bookings
+        bookingSystem.makeBooking(member1, oneToOneLesson1, LocalDateTime.now(), LocalTime.of(14, 0));
+        bookingSystem.makeBooking(member2, groupLesson1, LocalDateTime.now().plusDays(2), LocalTime.of(10, 0));
+
+        // View the bookings
+        bookingSystem.getBookings();
+    }
+    
+}
