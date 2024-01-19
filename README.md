@@ -25,7 +25,7 @@ git clone https://github.com/SalonTamang/music-player-using-cplusplus.git
 ```groovy
 cd music-player-using-cplusplus
 ```
-### Run the output.exe file
+### Run the program.exe file
 ```groovy
 ./program.exe
 ```
